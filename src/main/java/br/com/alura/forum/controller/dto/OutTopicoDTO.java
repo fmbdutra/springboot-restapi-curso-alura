@@ -8,13 +8,13 @@ import br.com.alura.forum.modelo.Topico;
 import lombok.Getter;
 
 @Getter
-public class TopicoDTO {
+public class OutTopicoDTO {
 	private Long id;
 	private String titulo;
 	private String mensagem;
 	private LocalDateTime dataCriacao;
 	
-	public TopicoDTO(Topico topico) {
+	public OutTopicoDTO(Topico topico) {
 		this.id = topico.getId();
 		this.titulo = topico.getTitulo();
 		this.mensagem = topico.getMensagem();
@@ -23,9 +23,9 @@ public class TopicoDTO {
 
 
 
-	public static List<TopicoDTO> converter(List<Topico> topicos) {
+	public static List<OutTopicoDTO> converter(List<Topico> topicos) {
 				
-		return topicos.stream().map(TopicoDTO::new).collect(Collectors.toList());
+		return topicos.stream().map(OutTopicoDTO::new).collect(Collectors.toList());
 	}
 	
 }
