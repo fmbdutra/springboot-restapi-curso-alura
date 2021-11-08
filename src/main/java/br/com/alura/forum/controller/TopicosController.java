@@ -3,6 +3,8 @@ package br.com.alura.forum.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +46,7 @@ public class TopicosController {
 	
 	//Deve retornar 201 ao inves de 200, pois 201 é a criação de recurso no servidor.
 	@PostMapping //[metodo]Mapping - Modo 2 de definir o método http
-	public ResponseEntity<OutTopicoDTO> cadastrar(@RequestBody InTopicoDTO novoTopico, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<OutTopicoDTO> cadastrar(@RequestBody @Valid InTopicoDTO novoTopico, UriComponentsBuilder uriBuilder) {
 		Topico topico = novoTopico.converter(cursoRepository);
 		topicoRepository.save(topico);
 		
