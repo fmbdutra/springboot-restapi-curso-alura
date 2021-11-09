@@ -2,6 +2,7 @@ package br.com.alura.forum.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -69,10 +70,14 @@ public class TopicosController {
 	}
 	
 	@GetMapping(value="/{id}")
-	public OutDetalhesTopicoDTO detalhar(@PathVariable("id") Long id) {
-		Topico topico = topicoRepository.getById(id);		
+	public ResponseEntity<OutDetalhesTopicoDTO> detalhar(@PathVariable("id") Long id) {
+//		Topico topico = topicoRepository.getById(id);		
+		Optional<Topico> topico = topicoRepository.findById(id);		
 		
-		return new OutDetalhesTopicoDTO(topico);
+		if (topico.isPresent()) return ResponseEntity.ok(new OutDetalhesTopicoDTO(topico.get()));
+		else return ResponseEntity.notFound().build();
+		
+//		return new OutDetalhesTopicoDTO(topico);
 	}
 	
 	//PUT - arruma tudo o recurso
@@ -81,19 +86,27 @@ public class TopicosController {
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<OutTopicoDTO> atualizarTopico(@PathVariable Long id, @RequestBody @Valid InAtualizacaoTopicoDTO topicoAtualizado){
+		Optional<Topico> topico = topicoRepository.findById(id);	
 		
-		Topico topicoAlterado = topicoAtualizado.atualizar(id, topicoRepository);
-		
-		return ResponseEntity.ok(new OutTopicoDTO(topicoAlterado));
+		if (topico.isPresent()) {
+			Topico topicoAlterado = topicoAtualizado.atualizar(id, topicoRepository);
+			return ResponseEntity.ok(new OutTopicoDTO(topicoAlterado));
+		}
+		else return ResponseEntity.notFound().build();		
+//		return ResponseEntity.ok(new OutTopicoDTO(topicoAlterado));
 		
 	}
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> removerTopico (@PathVariable Long id){
-		topicoRepository.deleteById(id);
+	public ResponseEntity<?> removerTopico (@PathVariable Long id){		
+		Optional<Topico> topico = topicoRepository.findById(id);		
+		if (topico.isPresent()) {
+			topicoRepository.deleteById(id);
+			return ResponseEntity.ok().build();		
+		}
+		else return ResponseEntity.notFound().build();	
 		
-		return ResponseEntity.ok().build();
 	}
 	
 }
