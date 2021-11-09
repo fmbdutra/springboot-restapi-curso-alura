@@ -7,14 +7,20 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.alura.forum.controller.dto.InAtualizacaoTopicoDTO;
 import br.com.alura.forum.controller.dto.InTopicoDTO;
+import br.com.alura.forum.controller.dto.OutDetalhesTopicoDTO;
 import br.com.alura.forum.controller.dto.OutTopicoDTO;
 import br.com.alura.forum.modelo.Topico;
 import br.com.alura.forum.repository.CursoRepository;
@@ -58,6 +64,26 @@ public class TopicosController {
 		
 		//Passa o 201 (created) e no corpo passa todo o novo recurso com detalhes (.body)
 		return ResponseEntity.created(uri).body(new OutTopicoDTO(topico));
+	}
+	
+	@GetMapping(value="/{id}")
+	public OutDetalhesTopicoDTO detalhar(@PathVariable("id") Long id) {
+		Topico topico = topicoRepository.getById(id);		
+		
+		return new OutDetalhesTopicoDTO(topico);
+	}
+	
+	//PUT - arruma tudo o recurso
+	//PATH - arruma uma parte do recurso
+	//Quando não tem definido essas ideias, usa-se PUT normalmente
+	@PutMapping("/{id}")
+	@Transactional
+	public ResponseEntity<OutTopicoDTO> atualizarTopico(@PathVariable Long id, @RequestBody @Valid InAtualizacaoTopicoDTO topicoAtualizado){
+		
+		Topico topicoAlterado = topicoAtualizado.atualizar(id, topicoRepository);
+		
+		return ResponseEntity.ok(new OutTopicoDTO(topicoAlterado));
+		
 	}
 	
 }
