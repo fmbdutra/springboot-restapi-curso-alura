@@ -1,4 +1,4 @@
-# Curso de Spring Boot API REST: Construa uma API do Alura
+# SpringBoot API REST: Construa uma API do Alura
 
 Projeto de aprendizado feito CRUD baseado em uma API de fórum, <br>usando Java, Maven, JPA/Hibernate e banco de dados H2.
 
