@@ -21,8 +21,6 @@ public class OutTopicoDTO {
 		this.dataCriacao = topico.getDataCriacao();
 	}
 
-
-
 	public static List<OutTopicoDTO> converter(List<Topico> topicos) {
 				
 		return topicos.stream().map(OutTopicoDTO::new).collect(Collectors.toList());
